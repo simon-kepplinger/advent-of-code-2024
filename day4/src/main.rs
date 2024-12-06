@@ -1,6 +1,7 @@
 use std::fmt;
 use std::fs;
 use crate::Direction::{Down, DownLeft, DownRight, Left, Right, Up, UpLeft, UpRight};
+use aoc_core::read;
 
 #[derive(Clone, Debug)]
 struct Point {
@@ -245,8 +246,4 @@ fn main() {
     }
 
     println!("{}", count);
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path).expect(&format!("could not open file {}", path))
 }

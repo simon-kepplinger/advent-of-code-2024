@@ -1,4 +1,5 @@
 use std::fs;
+use aoc_core::read;
 
 fn main() {
     let sum: u32 = read("in/input")
@@ -30,9 +31,4 @@ fn is_secure(levels: Vec<i32>) -> u32 {
     } else {
         0
     }
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path)
-        .expect(&format!("could not open file {}", path))
 }

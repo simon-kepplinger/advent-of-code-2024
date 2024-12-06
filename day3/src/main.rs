@@ -1,5 +1,6 @@
 use std::fs;
 use regex::Regex;
+use aoc_core::read;
 
 fn main() {
     let mut input = read("in/input");
@@ -35,9 +36,4 @@ fn multiply(memory: &str) -> u32 {
             a * b
         })
         .sum()
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path)
-        .expect(&format!("could not open file {}", path))
 }

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::fs;
+use aoc_core::read;
 
 fn main() {
     let values: Vec<u32> = read("in/input")
@@ -27,9 +27,4 @@ fn main() {
     }
 
     println!("{}", sum);
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path)
-        .expect(&format!("could not open file {}", path))
 }

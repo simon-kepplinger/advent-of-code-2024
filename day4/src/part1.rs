@@ -1,5 +1,6 @@
 use std::fmt;
 use std::fs;
+use aoc_core::read;
 use crate::Direction::{Down, DownLeft, DownRight, Left, Right, Up, UpLeft, UpRight};
 
 #[derive(Clone, Debug)]
@@ -231,8 +232,4 @@ fn main() {
     }
 
     println!("{}", count);
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path).expect(&format!("could not open file {}", path))
 }

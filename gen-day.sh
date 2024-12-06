@@ -4,7 +4,8 @@ DAY=$1
 URL="https://adventofcode.com/2024/day/$DAY"
 DIR="day$DAY"
 
-cargo new "$DIR"
+cargo new --bin "$DIR"
+echo 'aoc_core = { path = "../aoc_core" }' >> "$DIR/Cargo.toml"
 
 echo -e "\nCreating input files ..."
 

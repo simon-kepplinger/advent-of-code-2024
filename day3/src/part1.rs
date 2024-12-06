@@ -1,5 +1,6 @@
 use std::fs;
 use regex::Regex;
+use aoc_core::read;
 
 fn main() {
     let input = read("in/input");
@@ -15,9 +16,4 @@ fn main() {
         .sum();
 
     println!("{:?}", sum);
-}
-
-fn read(path: &str) -> String {
-    fs::read_to_string(path)
-        .expect(&format!("could not open file {}", path))
 }
