@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::ffi::FromBytesUntilNulError;
 use aoc_core::{end_measure, read, start_measure};
 use aoc_core::grid::Grid;
 use aoc_core::spatial::{Angle, Direction, DirectionalPoint, Point, PointData, Rotation};
@@ -13,13 +14,18 @@ enum PatrolResult {
 struct PatrolGrid {
     grid: Grid,
     visited: Vec<DirectionalPoint>,
+    size: i32
 }
 
 impl PatrolGrid {
     fn from_string(input: &str) -> PatrolGrid {
+        let grid = Grid::from_string(input);
+        let size = grid.height() * grid.length();
+
         PatrolGrid {
             grid: Grid::from_string(input),
             visited: Vec::new(),
+            size
         }
     }
 
@@ -53,6 +59,32 @@ impl PatrolGrid {
             .unwrap()
     }
 
+    fn patrol_fast(&self,
+                   from: &Point,
+                   direction: &Direction,
+                   count: i32) -> PatrolResult {
+        let moved = self.grid.move_to(from, direction);
+
+        match moved {
+            Some(pos) => {
+                if pos.value != &'#' {
+                    if count > 2 * self.size  {
+                        return PatrolResult::Loop
+                    }
+
+                    self.patrol_fast(&pos.point, direction, count + 1)
+                } else {
+                    let new_direction = direction.rotate(Rotation::Right, Angle::Deg90);
+
+                    self.patrol_fast(from, &new_direction, count + 1)
+                }
+            }
+            None => {
+                PatrolResult::Exit
+            }
+        }
+    }
+
     fn patrol(&mut self,
               from: Point,
               direction: Direction) -> PatrolResult {
@@ -80,6 +112,13 @@ impl PatrolGrid {
                 }
             }
             None => {
+                self.visited.push(
+                    DirectionalPoint {
+                        point: from.clone(),
+                        direction: direction.clone()
+                    }
+                );
+
                 PatrolResult::Exit
             }
         }
@@ -88,30 +127,24 @@ impl PatrolGrid {
 
 fn main() {
     let mes = start_measure();
-    let input = read("in/example");
+    let input = read("in/input");
 
     let mut patrol = PatrolGrid::from_string(&input);
     let start = patrol.get_start();
 
     patrol.patrol(start.point, Direction::Up);
-    let initial_patrol: Vec<_> = patrol.visited.clone();
+    let initial_patrol = patrol.get_distinct_visited().clone();
     let mut results: Vec<PatrolResult> = vec![];
 
-    for to_block in initial_patrol {
-        println!("{}", results.iter().len());
+    let mut simple_patrol = PatrolGrid::from_string(&input);
 
-        if results.iter().len() == 1130 || results.iter().len() == 4327 || results.iter().len() == 4732 {
-            results.push(PatrolResult::Exit);
-            continue;
-        }
-
-        let mut blocked_patrol = patrol.clone();
-        blocked_patrol.reset_visits();
-        blocked_patrol.block_position(&to_block.point);
+    for to_block in initial_patrol.into_iter() {
+        simple_patrol.block_position(&to_block);
         let start = patrol.get_start();
 
-        let result = blocked_patrol.patrol(start.point, Direction::Up);
+        let result = simple_patrol.patrol_fast(&start.point, &Direction::Up, 0);
         results.push(result);
+        simple_patrol.unblock_position(&to_block);
     }
 
     let loop_count = results
