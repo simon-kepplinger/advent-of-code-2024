@@ -1,7 +1,7 @@
 use std::fmt;
 use crate::spatial::{Direction, Point, PointData};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Grid {
     pub data: Vec<Vec<char>>,
 }
@@ -10,7 +10,6 @@ pub struct GridIterator<'a> {
     pub grid: &'a Grid,
     pub point: Point,
 }
-
 
 impl Grid {
     pub fn from_string(input: &str) -> Self {
@@ -21,6 +20,10 @@ impl Grid {
 
     pub fn get(&self, point: &Point) -> Option<&char> {
         self.data.get(point.y as usize)?.get(point.x as usize)
+    }
+
+    pub fn set(&mut self, point: &Point, value: char) {
+        self.data[point.y as usize][point.x as usize] = value;
     }
 
     pub fn length(&self) -> i32 {
