@@ -6,13 +6,20 @@ pub struct Point {
 
 impl Point {
     pub fn neighbour(&self, direction: &Direction) -> Point {
-        self.add(direction.as_point())
+        self.add(&direction.as_point())
     }
 
-    pub fn add(&self, other: Point) -> Point {
+    pub fn add(&self, other: &Point) -> Point {
         Point {
             x: self.x + other.x,
             y: self.y + other.y,
+        }
+    }
+
+    pub fn sub(&self, other: &Point) -> Point {
+        Point {
+            x: self.x - other.x,
+            y: self.y - other.y,
         }
     }
 }
@@ -27,6 +34,22 @@ pub struct PointData<'a> {
 pub struct DirectionalPoint {
     pub point: Point,
     pub direction: Direction,
+}
+
+#[derive(Debug)]
+pub struct Vector {
+    pub from: Point,
+    pub to: Point,
+}
+
+impl Vector {
+    pub fn from_points(from: Point, to: Point) -> Vector {
+        Vector { from, to }
+    }
+
+    pub fn direction(&self) -> Point {
+        self.to.sub(&self.from)
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -48,7 +71,7 @@ pub enum Rotation {
 
 pub enum Angle {
     Deg45 = 1,
-    Deg90 = 2
+    Deg90 = 2,
 }
 
 impl Direction {
@@ -70,7 +93,7 @@ impl Direction {
             Direction::UpRight,
             Direction::Right,
             Direction::DownRight,
-            Direction::Down
+            Direction::Down,
         ]
     }
 

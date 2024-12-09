@@ -1,5 +1,5 @@
-use std::fmt;
 use crate::spatial::{Direction, Point, PointData};
+use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -13,13 +13,18 @@ pub struct GridIterator<'a> {
 
 impl Grid {
     pub fn from_string(input: &str) -> Self {
-        let grid = input.lines().map(|line| line.chars().collect()).collect();
+        let grid = input
+            .lines()
+            .map(|line| line.chars().collect())
+            .collect();
 
         Grid { data: grid }
     }
 
     pub fn get(&self, point: &Point) -> Option<&char> {
-        self.data.get(point.y as usize)?.get(point.x as usize)
+        self.data
+            .get(point.y as usize)?
+            .get(point.x as usize)
     }
 
     pub fn set(&mut self, point: &Point, value: char) {
@@ -41,15 +46,17 @@ impl Grid {
         }
     }
 
-    pub fn move_to(&self, point: &Point,
-                   direction: &Direction) -> Option<PointData> {
+    pub fn is_within(&self, point: &Point) -> bool {
+        point.x >= 0 && point.y >= 0 && point.x < self.length() && point.y < self.height()
+    }
+
+    pub fn move_to(&self, point: &Point, direction: &Direction) -> Option<PointData> {
         let neighbour = point.neighbour(direction);
 
-        self.get(&neighbour)
-            .map(|v| PointData {
-                point: neighbour,
-                value: v
-            })
+        self.get(&neighbour).map(|v| PointData {
+            point: neighbour,
+            value: v,
+        })
     }
 }
 
