@@ -4,7 +4,7 @@ use aoc_core::spatial::{Point, Vector};
 use std::collections::{HashMap, HashSet};
 
 struct City {
-    grid: Grid,
+    grid: Grid<char>,
     antennas: HashMap<char, Vec<Point>>,
 }
 
@@ -20,7 +20,7 @@ impl AntennaPair {
         }
     }
 
-    fn get_antinodes(&self, grid: &Grid) -> Vec<Point> {
+    fn get_antinodes(&self, grid: &Grid<char>) -> Vec<Point> {
         let dir = self.vector.direction();
 
         let mut nodes: Vec<Point> = vec![self.vector.from.clone()];
@@ -55,7 +55,7 @@ impl AntennaPair {
 
 impl City {
     fn from_string(input: &str) -> City {
-        let grid = Grid::from_string(input);
+        let grid = Grid::<char>::from_string(input);
         let mut antennas = HashMap::new();
 
         for pos in grid.iter().filter(|pos| pos.value != &'.') {
