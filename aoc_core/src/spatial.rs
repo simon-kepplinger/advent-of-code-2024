@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -24,9 +24,9 @@ impl Point {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct PointData<'a> {
-    pub value: &'a char,
+#[derive(Debug, Clone, Copy)]
+pub struct PointData<'a, T> {
+    pub value: &'a T,
     pub point: Point,
 }
 
@@ -85,6 +85,15 @@ impl Direction {
             Direction::DownLeft,
             Direction::Left,
             Direction::UpLeft,
+        ]
+    }
+
+    pub fn cardinal() -> [Direction; 4] {
+        [
+            Direction::Up,
+            Direction::Right,
+            Direction::Down,
+            Direction::Left,
         ]
     }
 

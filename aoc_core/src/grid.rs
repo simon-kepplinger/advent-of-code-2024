@@ -2,32 +2,23 @@ use crate::spatial::{Direction, Point, PointData};
 use std::fmt;
 
 #[derive(Debug, Clone)]
-pub struct Grid {
-    pub data: Vec<Vec<char>>,
+pub struct Grid<T> {
+    pub data: Vec<Vec<T>>,
 }
 
-pub struct GridIterator<'a> {
-    pub grid: &'a Grid,
+pub struct GridIterator<'a, T> {
+    pub grid: &'a Grid<T>,
     pub point: Point,
 }
 
-impl Grid {
-    pub fn from_string(input: &str) -> Self {
-        let grid = input
-            .lines()
-            .map(|line| line.chars().collect())
-            .collect();
-
-        Grid { data: grid }
-    }
-
-    pub fn get(&self, point: &Point) -> Option<&char> {
+impl<T> Grid<T> {
+    pub fn get(&self, point: &Point) -> Option<&T> {
         self.data
             .get(point.y as usize)?
             .get(point.x as usize)
     }
 
-    pub fn set(&mut self, point: &Point, value: char) {
+    pub fn set(&mut self, point: &Point, value: T) {
         self.data[point.y as usize][point.x as usize] = value;
     }
 
@@ -39,7 +30,7 @@ impl Grid {
         self.data.len() as i32
     }
 
-    pub fn iter(&self) -> GridIterator {
+    pub fn iter(&self) -> GridIterator<T> {
         GridIterator {
             grid: self,
             point: Point { x: -1, y: 0 },
@@ -50,7 +41,7 @@ impl Grid {
         point.x >= 0 && point.y >= 0 && point.x < self.length() && point.y < self.height()
     }
 
-    pub fn move_to(&self, point: &Point, direction: &Direction) -> Option<PointData> {
+    pub fn move_to(&self, point: &Point, direction: &Direction) -> Option<PointData<T>> {
         let neighbour = point.neighbour(direction);
 
         self.get(&neighbour).map(|v| PointData {
@@ -60,8 +51,19 @@ impl Grid {
     }
 }
 
-impl<'a> Iterator for GridIterator<'a> {
-    type Item = PointData<'a>;
+impl Grid<char> {
+    pub fn from_string(input: &str) -> Self {
+        let grid = input
+            .lines()
+            .map(|line| line.chars().collect())
+            .collect();
+
+        Grid { data: grid }
+    }
+}
+
+impl<'a, T> Iterator for GridIterator<'a, T> {
+    type Item = PointData<'a, T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.point.y >= self.grid.height() {
@@ -87,7 +89,22 @@ impl<'a> Iterator for GridIterator<'a> {
     }
 }
 
-impl fmt::Display for Grid {
+impl Grid<u8> {
+    pub fn from_string(input: &str) -> Self {
+        let grid = input
+            .lines()
+            .map(|line| {
+                line.chars()
+                    .map(|c| c.to_digit(10).unwrap() as u8)
+                    .collect()
+            })
+            .collect();
+
+        Grid { data: grid }
+    }
+}
+
+impl<T: fmt::Display> fmt::Display for Grid<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for row in &self.data {
             for item in row {
