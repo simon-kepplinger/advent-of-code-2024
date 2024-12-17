@@ -52,7 +52,7 @@ impl Vector {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Hash, Eq)]
 pub enum Direction {
     Up = 0,
     UpRight = 1,
