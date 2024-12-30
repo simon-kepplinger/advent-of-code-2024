@@ -1,7 +1,7 @@
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub struct Point {
-    pub x: i32,
-    pub y: i32,
+pub struct Point<T = i32> {
+    pub x: T,
+    pub y: T,
 }
 
 impl Point {
