@@ -1,3 +1,4 @@
+max_width = 80
 chain_width = 50
 attr_fn_like_width = 50
 fn_call_width = 50

@@ -38,10 +38,17 @@ impl<T> Grid<T> {
     }
 
     pub fn is_within(&self, point: &Point) -> bool {
-        point.x >= 0 && point.y >= 0 && point.x < self.length() && point.y < self.height()
+        point.x >= 0
+            && point.y >= 0
+            && point.x < self.length()
+            && point.y < self.height()
     }
 
-    pub fn move_to(&self, point: &Point, direction: &Direction) -> Option<PointData<T>> {
+    pub fn move_to(
+        &self,
+        point: &Point,
+        direction: &Direction,
+    ) -> Option<PointData<'_, T>> {
         let neighbour = point.neighbour(direction);
 
         self.get(&neighbour).map(|v| PointData {

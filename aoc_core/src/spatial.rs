@@ -30,6 +30,21 @@ pub struct PointData<'a, T> {
     pub point: Point,
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct OwnedPointData<T> {
+    pub value: T,
+    pub point: Point,
+}
+
+impl<T: Copy> OwnedPointData<T> {
+    pub fn from_point_data(point_data: PointData<T>) -> Self {
+        OwnedPointData {
+            value: *point_data.value,
+            point: point_data.point,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct DirectionalPoint {
     pub point: Point,
@@ -123,7 +138,9 @@ impl Direction {
         let current = self.clone() as u8;
 
         let new_dir = match rotation {
-            Rotation::Left => (current + 8 - (rotation as u8 * angle as u8)) % 8,
+            Rotation::Left => {
+                (current + 8 - (rotation as u8 * angle as u8)) % 8
+            }
             Rotation::Right => (current + (rotation as u8 * angle as u8)) % 8,
         };
 

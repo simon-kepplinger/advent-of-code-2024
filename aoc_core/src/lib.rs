@@ -1,5 +1,6 @@
 pub mod grid;
 pub mod spatial;
+pub mod tree;
 
 use std::fs;
 use std::time::Instant;
