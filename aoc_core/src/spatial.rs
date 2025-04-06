@@ -45,10 +45,20 @@ impl<T: Copy> OwnedPointData<T> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct DirectionalPoint {
     pub point: Point,
     pub direction: Direction,
+}
+
+impl DirectionalPoint {
+    pub fn new(point: Point, direction: Direction) -> Self {
+        DirectionalPoint { point, direction }
+    }
+
+    pub fn neighbour(&self, direction: &Direction) -> DirectionalPoint {
+        DirectionalPoint::new(self.point.add(&direction.as_point()), *direction)
+    }
 }
 
 #[derive(Debug)]
@@ -67,7 +77,7 @@ impl Vector {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Hash, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Hash, Eq)]
 pub enum Direction {
     Up = 0,
     UpRight = 1,

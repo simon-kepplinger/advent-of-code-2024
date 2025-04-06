@@ -58,6 +58,18 @@ impl<T> Grid<T> {
     }
 }
 
+impl<T: PartialEq> Grid<T> {
+    pub fn find(&self, value: T) -> Option<Point<i32>> {
+        for pos in self.iter() {
+            if *pos.value == value {
+                return Some(pos.point);
+            }
+        }
+
+        None
+    }
+}
+
 impl Grid<char> {
     pub fn from_string(input: &str) -> Self {
         let grid = input
