@@ -97,6 +97,7 @@ pub enum Rotation {
 pub enum Angle {
     Deg45 = 1,
     Deg90 = 2,
+    Deg180 = 4,
 }
 
 impl Direction {
@@ -145,16 +146,16 @@ impl Direction {
     }
 
     pub fn rotate(&self, rotation: Rotation, angle: Angle) -> Direction {
-        let current = self.clone() as u8;
+        let current = self.clone() as i8;
 
         let new_dir = match rotation {
             Rotation::Left => {
-                (current + 8 - (rotation as u8 * angle as u8)) % 8
+                (current + 8 - (rotation as i8 * angle as i8)) % 8
             }
-            Rotation::Right => (current + (rotation as u8 * angle as u8)) % 8,
+            Rotation::Right => (current + (rotation as i8 * angle as i8)) % 8,
         };
 
-        Direction::from_num(new_dir)
+        Direction::from_num(new_dir as u8)
     }
 
     fn from_num(n: u8) -> Direction {
