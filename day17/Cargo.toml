@@ -1,0 +1,10 @@
+[package]
+name = "day17"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc_core = { path = "../aoc_core" }
+human_format = "1.1"
+itoa = "1.0"
+
