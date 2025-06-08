@@ -71,6 +71,12 @@ impl<T: PartialEq> Grid<T> {
 }
 
 impl Grid<char> {
+    pub fn from_size(x_size: usize, y_size: usize) -> Self {
+        let data: Vec<Vec<char>> = vec![vec!['.'; x_size]; y_size];
+
+        Grid { data }
+    }
+
     pub fn from_string(input: &str) -> Self {
         let grid = input
             .lines()
