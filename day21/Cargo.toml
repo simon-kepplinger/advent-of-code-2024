@@ -1,0 +1,12 @@
+[package]
+name = "day21"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc_core = { path = "../aoc_core" }
+itertools = "0.12"
+threadpool = "1.8.1"
+threadpool_scope = "0.1.0"
+crossbeam = "0.8.4"
+
